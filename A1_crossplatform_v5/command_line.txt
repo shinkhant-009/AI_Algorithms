@@ -1,0 +1,40 @@
+//////////////////////////////////////////////////////
+// sample command lines
+//////////////////////////////////////////////////////
+search  "single_run" astar_explist_manhattan "608435127" "123456780"
+search  single_run astar_explist_manhattan 608435127 123456780
+search  "animate_run" astar_explist_manhattan "608435127" "123456780"
+
+search  "animate_run" uc_explist "608435127" "123456780"
+
+search "batch_run" astar_explist_manhattan 
+search "batch_run" astar_explist_misplacedtiles 
+search "batch_run" uc_explist 
+search "batch_run" all 
+
+
+//////////////////////////////////////////////////////
+// Mac: go to this folder first (new Terminal)
+//////////////////////////////////////////////////////
+# headers for SDL2 (needed before make)
+# libraries for SDL2 (needed before make)
+
+export CPATH=/opt/homebrew/include:/opt/homebrew/include/SDL2         
+export LIBRARY_PATH=/opt/homebrew/lib                                 
+
+make clean                                                            # delete old search.out and .o files
+make                                                                  # build search.out
+
+cp /usr/local/lib/libSDL_bgi.so .                                     # copy graphics library into this folder (once)
+file libSDL_bgi.so                                                    # must say arm64, not x86_64
+
+./search.out single_run astar_explist_manhattan 608435127 123456780   # one puzzle, text results only
+./search.out animate_run astar_explist_manhattan 608435127 123456780  # one puzzle, graphics window (press a key to start)
+./search.out animate_run uc_explist 608435127 123456780               # animate uniform-cost search
+./search.out single_run uc_explist 608435127 123456780
+./search.out animate_run uc_explist 608435127 123456780
+
+./search.out batch_run astar_explist_manhattan                        # batch: A* Manhattan
+./search.out batch_run astar_explist_misplacedtiles                   # batch: A* misplaced tiles
+./search.out batch_run uc_explist                                     # batch: uniform cost
+./search.out batch_run all                                            # batch: all algorithms
