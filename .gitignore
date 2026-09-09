@@ -1,0 +1,28 @@
+# Build output
+*.o
+*.exe
+search.out
+search.exe
+search
+testCode.cpp
+test.exe
+test
+main.out
+
+# Local graphics library (copy from /usr/local/lib, do not commit)
+libSDL_bgi.so
+
+# macOS
+.DS_Store
+
+# CLion / IntelliJ
+.idea/
+
+# VS Code (local editor settings)
+.vscode/
+
+# Files
+*.xlsx
+*.txt
+!command_line.txt
+*.pdf

@@ -1,0 +1,11 @@
+cd "the project folder"
+export CPATH=/opt/homebrew/include:/opt/homebrew/include/SDL2         # headers for SDL2 (needed before make)
+export LIBRARY_PATH=/opt/homebrew/lib                                 # libraries for SDL2 (needed before make)
+
+make clean                                                            # delete old main.out and .o files
+make                                                                  # build main.out
+
+cp /usr/local/lib/libSDL_bgi.so .                                     # copy graphics library into this folder (once)
+file libSDL_bgi.so                                                    # must say arm64, not x86_64
+
+./main.out                                                            # run; then type an angle [-60, 60] and press Enter
