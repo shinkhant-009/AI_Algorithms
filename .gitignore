@@ -25,4 +25,6 @@ libSDL_bgi.so
 *.xlsx
 *.txt
 !command_line.txt
+!FuzzySets.txt
+!Trapezoidal_Membership_Functions.txt
 *.pdf
