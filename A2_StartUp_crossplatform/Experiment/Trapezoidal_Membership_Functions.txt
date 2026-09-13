@@ -1,0 +1,222 @@
+TRAPEZOIDAL MEMBERSHIP FUNCTIONS
+159.302  |  Lecture: Yamakawa Fuzzy Controller  |  Assignment 2
+==============================================================
+
+A membership function F(x) maps a crisp input x to a degree of
+membership in [0, 1].
+
+Vertices of a trapezoid, left to right:
+  a = left foot     (membership starts rising from 0)
+  b = left shoulder (membership reaches 1)
+  c = right shoulder(membership still 1)
+  d = right foot    (membership back to 0)
+
+Must always keep:  a < b <= c < d   (for a regular trapezoid)
+
+
+--------------------------------------------------------------
+1. REGULAR TRAPEZOID   (closed on both sides)
+--------------------------------------------------------------
+Shape: table-top. Used for middle linguistic terms: NS, ZE, PS.
+
+  mu
+  1 |      ________
+    |     /        \
+  0 |____/          \____
+       a    b      c    d     x
+
+Compact formula:
+  F_regular(x) = max( min( (x-a)/(b-a) , 1 , (d-x)/(d-c) ) , 0 )
+
+Piecewise:
+  x <= a  or  x >= d     ->  0
+  a < x < b              ->  (x - a) / (b - a)     rising leg
+  b <= x <= c            ->  1                     flat top
+  c < x < d              ->  (d - x) / (d - c)     falling leg
+
+Engine type:  regular_trapezoid
+Call:         init_trapz(a, b, c, d, regular_trapezoid)
+
+All four corners are used.
+
+Alternative code (already in trapz()):
+  Left_Slope  = 1 / (b - a)
+  Right_Slope = 1 / (c - d)          // note: c-d is negative, slope is negative
+
+  CASE 1: x <= a  OR  x >= d         ->  0
+  CASE 2: x >= b  AND x <= c         ->  1
+  CASE 3: a <= x <= b                ->  Left_Slope  * (x - a)
+  CASE 4: c <= x <= d                ->  Right_Slope * (x - d)
+
+
+--------------------------------------------------------------
+2. LEFT TRAPEZOID   (opens to the left / left shoulder)
+--------------------------------------------------------------
+Shape: fully true on the far left, then falls to 0.
+Used for NL  (negatively large / leaning left / far left).
+
+  mu
+  1 |__________
+    |          \
+  0 |           \____
+             a      b     x
+
+Lecture used vertices c,d for this shape. In the starter code
+those two corners are stored as a,b. Pass c=0, d=0.
+
+Compact formula:
+  F_left(x) = max( min( 1 , (b - x)/(b - a) ) , 0 )
+
+Piecewise:
+  x <= a     ->  1
+  a < x < b  ->  (b - x) / (b - a)     falling leg
+  x >= b     ->  0
+
+Engine type:  left_trapezoid
+Call:         init_trapz(a, b, 0, 0, left_trapezoid)
+
+Alternative code (already in trapz()):
+  Left_Slope  = 0
+  Right_Slope = 1 / (a - b)
+
+  CASE 1: x <= a     ->  1
+  CASE 2: x >= b     ->  0
+  CASE 3: a < x < b  ->  Right_Slope * (x - b)
+
+
+--------------------------------------------------------------
+3. RIGHT TRAPEZOID   (opens to the right / right shoulder)
+--------------------------------------------------------------
+Shape: 0 on the left, then rises and stays fully true.
+Used for PL  (positively large / leaning right / far right).
+
+  mu
+  1 |           __________
+    |          /
+  0 |_________/
+             a      b     x
+
+Compact formula:
+  F_right(x) = max( min( 1 , (x - a)/(b - a) ) , 0 )
+
+Piecewise:
+  x <= a     ->  0
+  a < x < b  ->  (x - a) / (b - a)     rising leg
+  x >= b     ->  1
+
+Engine type:  right_trapezoid
+Call:         init_trapz(a, b, 0, 0, right_trapezoid)
+
+Alternative code (already in trapz()):
+  Left_Slope  = 1 / (b - a)
+  Right_Slope = 0
+
+  CASE 1: x <= a     ->  0
+  CASE 2: x >= b     ->  1
+  CASE 3: a < x < b  ->  Left_Slope * (x - a)
+
+
+--------------------------------------------------------------
+4. TRIANGULAR   (special case of regular, NOT a fourth engine type)
+--------------------------------------------------------------
+Set b = c. The flat top shrinks to a point.
+
+  mu
+  1 |        /\
+    |       /  \
+  0 |______/    \______
+        a  b=c    d     x
+
+Compact formula:
+  F_triangle(x) = max( min( (x-a)/(b-a) , 1 , (d-x)/(d-b) ) , 0 )
+
+Engine type: still regular_trapezoid
+Call:        init_trapz(a, b, b, d, regular_trapezoid)
+             (pass the same number for b and c)
+
+
+==============================================================
+WHAT THE ASSIGNMENT REQUIRES
+==============================================================
+Fuzzify the TWO combined inputs only (Yamakawa):
+  X = A * theta + B * theta_dot
+  Y = C * x     + D * x_dot
+
+Do NOT define separate membership arrays for theta, theta_dot, x, x_dot.
+
+Suggested input range (assignment brief):
+  X: [-4, 4]
+  Y: [-4, 4]
+
+Five fuzzy sets PER input  (10 membership functions total).
+X and Y may use the SAME shapes to start.
+
+  Set   index     type                 corners
+  -----------------------------------------------------------
+  NL    in_nl     left_trapezoid       a, b          (c,d unused)
+  NS    in_ns     regular_trapezoid    a, b, c, d
+  ZE    in_ze     regular_trapezoid    a, b, c, d    (triangle OK if b=c)
+  PS    in_ps     regular_trapezoid    a, b, c, d
+  PL    in_pl     right_trapezoid      a, b          (c,d unused)
+
+You do NOT write the slope formulas. init_trapz() and trapz()
+already compute mu. You only choose the corners.
+
+
+==============================================================
+HOW TO CALL init_trapz  (sketch, tune later)
+==============================================================
+Example overlapping partition on [-4, 4]:
+
+  // INPUT_X
+  fl->inp_mem_fns[INPUT_X][in_nl] = init_trapz(-2.0, -1.0, 0, 0, left_trapezoid);
+  fl->inp_mem_fns[INPUT_X][in_ns] = init_trapz(-2.0, -1.0, -0.5, 0.0, regular_trapezoid);
+  fl->inp_mem_fns[INPUT_X][in_ze] = init_trapz(-1.0, -0.5,  0.5, 1.0, regular_trapezoid);
+  fl->inp_mem_fns[INPUT_X][in_ps] = init_trapz( 0.0,  0.5,  1.0, 2.0, regular_trapezoid);
+  fl->inp_mem_fns[INPUT_X][in_pl] = init_trapz( 1.0,  2.0, 0, 0, right_trapezoid);
+
+  // INPUT_Y  -- copy the same five lines with INPUT_Y
+
+Ignore old comments that use in_x / in_neg.
+Use:  INPUT_X, INPUT_Y    and    in_nl, in_ns, in_ze, in_ps, in_pl
+
+
+==============================================================
+OVERLAP RULE
+==============================================================
+Neighbouring sets MUST overlap. Otherwise some X or Y values
+belong to no set, no rule fires, and you get:
+  FLPRCS Error: Sum2 ... is 0
+
+Typical picture on [-4, 4]:
+
+  mu
+  1  NL_________   NS      ZE      PS   _________PL
+              \   /\      /\      /\   /
+               \ /  \    /  \    /  \ /
+                X    \  /    \  /    X
+               -2   -1 -0.5 0.5  1    2
+
+At X = -1, both NL and NS can be partly true. That is intended.
+
+
+==============================================================
+WHAT YOU CALCULATE vs WHAT THE ENGINE CALCULATES
+==============================================================
+YOU choose:   a, b, c, d  for each of the 10 sets
+ENGINE does:  mu = trapz(x, that_trapezoid)
+then:         rule weight w = min(mu_X, mu_Y)
+then:         F = sum(w * output_constant) / sum(w)
+
+Output forces (NL=-100, ZE=0, PL=+100, ...) are CONSTANTS
+(zero-order Sugeno). They are NOT membership functions.
+
+
+==============================================================
+QUICK MEMORY
+==============================================================
+  left_trapezoid    = NL shoulder, 1 on the far left
+  regular_trapezoid = NS / ZE / PS  (or triangle if b = c)
+  right_trapezoid   = PL shoulder, 1 on the far right
+
+  5 sets for X + 5 sets for Y = 10 init_trapz calls

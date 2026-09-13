@@ -1,0 +1,33 @@
+Our first set  (range -6 to 6)
+Set   a      b      c      d      Shape
+NL   -6     -6     -3     -1.5   shoulder (flat 1 from -6 to -3, ramps to 0 at -1.5)
+NS   -3     -1.5   -1.5    0     triangle, peak at -1.5
+ZE   -1.5    0      0      1.5   triangle, peak at 0
+PS    0      1.5    1.5    3     triangle, peak at 1.5
+PL    1.5    3      6      6     shoulder (ramps up from 0 at 1.5, flat 1 from 3 to 6)
+
+--------------------------------------------------------------
+
+1) First set
+Set   a     b      c     d     Shape
+NL   -4    -4     -2    -1    shoulder (flat 1 from -4 to -2, ramps to 0 at -1)
+NS   -2    -1    -0.5    0    trapezoid, flat top from -1 to -0.5
+ZE   -1   -0.5    0.5    1    trapezoid, flat top from -0.5 to 0.5
+PS    0    0.5     1     2    trapezoid, flat top from 0.5 to 1
+PL    1     2      4     4    shoulder (ramps up from 0 at 1, flat 1 from 2 to 4)
+
+2) Last set
+Set   a     b      c     d     Shape
+NL   -4    -4     -2    -1    shoulder (flat 1 from -4 to -2, ramps to 0 at -1)
+NS   -2    -1     -1     0    triangle, peak at -1
+ZE   -1     0      0     1    triangle, peak at 0
+PS    0     1      1     2    triangle, peak at 1
+PL    1     2      4     4    shoulder (ramps up from 0 at 1, flat 1 from 2 to 4)
+
+3) Previous last set
+Set   a     b      c     d     Shape
+NL   -4    -4     -4    -2    shoulder / triangle, peak at -4, ramps to 0 at -2
+NS   -4    -2     -2     0    triangle, peak at -2
+ZE   -2     0      0     2    triangle, peak at 0
+PS    0     2      2     4    triangle, peak at 2
+PL    2     4      4     4    shoulder / triangle, ramps up from 0 at 2, peak at 4
