@@ -1,0 +1,108 @@
+--------------------------------------------------------------
+0. MEMBERSHIP FUNCTIONS  (lecture compact formulas)
+    Same five formulas for Y: replace X with Y.
+    Engine already does this in trapz(). Do not code these by hand.
+--------------------------------------------------------------
+
+NL  (left trapezoid)   a = -3, b = -1.5
+
+  F_NL(X) = max( min( 1 , (b - X)/(b - a) ) , 0 )
+          = max( min( 1 , (-1.5 - X)/1.5 ) , 0 )
+
+
+PL  (right trapezoid)  a = 1.5, b = 3
+
+  F_PL(X) = max( min( 1 , (X - a)/(b - a) ) , 0 )
+          = max( min( 1 , (X - 1.5)/1.5 ) , 0 )
+
+
+NS, ZE, PS  (regular / triangle)
+
+  F(X) = max( min( (X - a)/(b - a) , 1 , (d - X)/(d - c) ) , 0 )
+
+  NS  a=-3, b=c=-1.5, d=0
+      F_NS(X) = max( min( (X + 3)/1.5 , 1 , (0 - X)/1.5 ) , 0 )
+
+  ZE  a=-1.5, b=c=0, d=1.5
+      F_ZE(X) = max( min( (X + 1.5)/1.5 , 1 , (1.5 - X)/1.5 ) , 0 )
+
+  PS  a=0, b=c=1.5, d=3
+      F_PS(X) = max( min( X/1.5 , 1 , (3 - X)/1.5 ) , 0 )
+
+
+--------------------------------------------------------------
+1. LABELS  (what the cell means)
+--------------------------------------------------------------
+                    Y  (cart)
+              NL        NS        ZE        PS        PL
+           +-------------------------------------------------
+        NL |  NVL       NL        NM        NS        ZE
+        NS |  NL        NM        NS        ZE        PS
+ X      ZE |  NM        NS        ZE        PS        PM
+(pole)  PS |  NS        ZE        PS        PM        PL
+        PL |  ZE        PS        PM        PL        PVL
+
+Pattern:  output index = X-index + Y-index
+  NL=0  NS=1  ZE=2  PS=3  PL=4
+  NVL=0 NL=1 NM=2 NS=3 ZE=4 PS=5 PM=6 PL=7 PVL=8
+
+
+--------------------------------------------------------------
+2. STARTING NEWTONS  (hardcoded in initFuzzySystem)
+--------------------------------------------------------------
+                    Y  (cart)
+                 NL   NS     ZE       PS     PL
+           +----------------------------------------
+        NL | -100    -75     -50     -25      0
+        NS |  -75    -50     -25       0    +25
+ X      ZE |  -50    -25       0     +25    +50
+(pole)  PS |  -25      0     +25     +50    +75
+        PL |    0    +25     +50     +75   +100
+
+Nine constants (tune later):
+
+  out_nvl = -100     negatively very large   (strong left)
+  out_nl  =  -75     negatively large
+  out_nm  =  -50     negatively medium
+  out_ns  =  -25     negatively small
+  out_ze  =    0     zero
+  out_ps  =  +25     positively small
+  out_pm  =  +50     positively medium
+  out_pl  =  +75     positively large
+  out_pvl = +100     positively very large   (strong right)
+
+
+--------------------------------------------------------------
+3. ALL 25 RULES
+--------------------------------------------------------------
+    IF X is    AND Y is    THEN F
+--------------------------------------
+ 1    NL         NL          NVL     -100
+ 2    NL         NS          NL       -75
+ 3    NL         ZE          NM       -50
+ 4    NL         PS          NS       -25
+ 5    NL         PL          ZE         0
+
+ 6    NS         NL          NL       -75
+ 7    NS         NS          NM       -50
+ 8    NS         ZE          NS       -25
+ 9    NS         PS          ZE         0
+10    NS         PL          PS       +25
+
+11    ZE         NL          NM       -50
+12    ZE         NS          NS       -25
+13    ZE         ZE          ZE         0
+14    ZE         PS          PS       +25
+15    ZE         PL          PM       +50
+
+16    PS         NL          NS       -25
+17    PS         NS          ZE         0
+18    PS         ZE          PS       +25
+19    PS         PS          PM       +50
+20    PS         PL          PL       +75
+
+21    PL         NL          ZE         0
+22    PL         NS          PS       +25
+23    PL         ZE          PM       +50
+24    PL         PS          PL       +75
+25    PL         PL          PVL     +100
