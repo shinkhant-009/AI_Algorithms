@@ -44,6 +44,7 @@ void initFuzzyRules(fuzzy_system_rec *fl) {
    //and so on, and so forth...
 
    // fl->rules[25+24].out_fuzzy_set = out_nl;
+
       return;
 }
 
@@ -51,11 +52,18 @@ void initFuzzyRules(fuzzy_system_rec *fl) {
 void initMembershipFunctions(fuzzy_system_rec *fl) {
 	
    /* The X membership functions */
+   fl->inp_mem_fns[INPUT_X][in_nl] = init_trapz(-3.0, -1.5, 0, 0, left_trapezoid);
+   fl->inp_mem_fns[INPUT_X][in_ns] = init_trapz(-3.0, -1.5, -1.5, 0.0, regular_trapezoid);
+   fl->inp_mem_fns[INPUT_X][in_ze] = init_trapz(-1.5,  0.0,  0.0, 1.5, regular_trapezoid);
+   fl->inp_mem_fns[INPUT_X][in_ps] = init_trapz( 0.0,  1.5,  1.5, 3.0, regular_trapezoid);
+   fl->inp_mem_fns[INPUT_X][in_pl] = init_trapz( 1.5,  3.0, 0, 0, right_trapezoid);
 
-   //Sample routines only, to give you an idea of what to do here
-  	//~ fl->inp_mem_fns[in_x][in_neg] = init_trapz (-1.5,-0.5,0,0,left_trapezoid);
-   //~ fl->inp_mem_fns[in_x][in_ze] = init_trapz (-1.5,-0.5,0.5,1.5,regular_trapezoid);
-   //~ fl->inp_mem_fns[in_x][in_pos] = init_trapz (0.5,1.5,0,0,right_trapezoid);
+   /* The Y dot membership functions */
+   fl->inp_mem_fns[INPUT_Y][in_nl] = init_trapz(-3.0, -1.5, 0, 0, left_trapezoid);
+   fl->inp_mem_fns[INPUT_Y][in_ns] = init_trapz(-3.0, -1.5, -1.5, 0.0, regular_trapezoid);
+   fl->inp_mem_fns[INPUT_Y][in_ze] = init_trapz(-1.5,  0.0,  0.0, 1.5, regular_trapezoid);
+   fl->inp_mem_fns[INPUT_Y][in_ps] = init_trapz( 0.0,  1.5,  1.5, 3.0, regular_trapezoid);
+   fl->inp_mem_fns[INPUT_Y][in_pl] = init_trapz( 1.5,  3.0, 0, 0, right_trapezoid);
 	
    /* The X dot membership functions */
    //enter the appropriate membership function initialisations here 
@@ -65,10 +73,6 @@ void initMembershipFunctions(fuzzy_system_rec *fl) {
   	
    /* The theta dot membership functions */
    //enter the appropriate membership function initialisations here
-  	
-
-	
-	
    return;
 }
 
@@ -76,14 +80,15 @@ void initFuzzySystem (fuzzy_system_rec *fl) {
 
    //Note: The settings of these parameters will depend upon your fuzzy system design
    fl->no_of_inputs = 2;  /* Inputs are handled 2 at a time only */
-   fl->no_of_rules = 50;
+   fl->no_of_rules = 25;   //25 rules for theta vs. theta_dot and 25 rules for x vs. x_dot ( 5 x 5 = 25 )
    fl->no_of_inp_regions = 5;
    fl->no_of_outputs = 9;
 	
-   coefficient_A=1.0;
-   coefficient_B=1.0;
-   coefficient_C=1.0;
-   coefficient_D=1.0;
+   // coefficient_A=1.0;
+   // coefficient_B=1.0;
+   // coefficient_C=1.0;
+   // coefficient_D=1.0;
+
 	
 	//Sample only
 	// fl->output_values [out_nvl]=-95.0;

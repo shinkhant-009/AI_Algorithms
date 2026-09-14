@@ -431,7 +431,7 @@ void runInvertedPendulum(){
 				
 		         //1) Enable this only after your fuzzy system has been completed already.
 		         //Remember, you need to define the rules, membership function parameters and rule outputs.
-		         //prevState.F = fuzzy_system(inputs, g_fuzzy_system); //call the fuzzy controller
+		        //  prevState.F = fuzzy_system(inputs, g_fuzzy_system); //call the fuzzy controller
 				 
 				 externalForce=0.0;
 
