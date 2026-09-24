@@ -8,10 +8,10 @@ panel_h = 175
 top_margin = 40
 height = top_margin + 5 * panel_h + 20
 
-scale_x = 58
+scale_x = 80
 scale_y = 90
-x_min = -6
-x_max = 6
+x_min = -4
+x_max = 4
 
 canvas = tk.Canvas(window, width=width, height=height, bg="white")
 canvas.pack()
@@ -22,48 +22,66 @@ canvas.pack()
 sets = [
     {
         "label": "NL",
-        "kind": "left shoulder   (flat 1 from -6 to -3, down to 0 at -1.5)",
-        "abcd": "a = -6,   b = -6,   c = -3,   d = -1.5",
+        "kind": "left shoulder   (flat 1 for x <= -2, down to 0 at -1)",
+        "abcd": "a = -2,   b = -2,   c = -2,   d = -1",
         "outline": "#1f4e79",
         "fill": "#cfe2f3",
-        "points": [(-6, 0), (-6, 1), (-3, 1), (-1.5, 0)],
-        "corners": [("a=b", -6, 1), ("c", -3, 1), ("d", -1.5, 0)],
+        "points": [(-4, 0), (-4, 1), (-2, 1), (-1, 0)],
+        "corners": [("c", -2, 1), ("d", -1, 0)],
     },
+    # {
+    #     "label": "NS",
+    #     "kind": "trapezoid, flat top from -1 to -0.5",
+    #     "abcd": "a = -2,   b = -1,   c = -0.5,   d = 0",
+    #     "outline": "#2e75b6",
+    #     "fill": "#d0e2f3",
+    #     "points": [(-2, 0), (-1, 1), (-0.5, 1), (0, 0)],
+    #     "corners": [("a", -2, 0), ("b", -1, 1), ("c", -0.5, 1), ("d", 0, 0)],
+    # },
     {
         "label": "NS",
-        "kind": "triangle, peak at -1.5",
-        "abcd": "a = -3,   b = -1.5,   c = -1.5,   d = 0",
+        "kind": "triangle, peak at -1 (b = c)",
+        "abcd": "a = -2,   b = -1,   c = -1,   d = 0",
         "outline": "#2e75b6",
         "fill": "#d0e2f3",
-        "points": [(-3, 0), (-1.5, 1), (0, 0)],
-        "corners": [("a", -3, 0), ("b=c", -1.5, 1), ("d", 0, 0)],
+        "points": [(-2, 0), (-1, 1), (0, 0)],
+        "corners": [("a", -2, 0), ("b=c", -1, 1), ("d", 0, 0)],
     },
     {
         "label": "ZE",
-        "kind": "triangle, peak at 0",
-        "abcd": "a = -1.5,   b = 0,   c = 0,   d = 1.5",
+        "kind": "trapezoid, flat top from -0.25 to 0.25",
+        "abcd": "a = -1,   b = -0.25,   c = 0.25,   d = 1",
         "outline": "#548235",
         "fill": "#e2efda",
-        "points": [(-1.5, 0), (0, 1), (1.5, 0)],
-        "corners": [("a", -1.5, 0), ("b=c", 0, 1), ("d", 1.5, 0)],
+        "points": [(-1, 0), (-0.25, 1), (0.25, 1), (1, 0)],
+        "corners": [("a", -1, 0), ("b", -0.25, 1), ("c", 0.25, 1), ("d", 1, 0)],
     },
+    # {
+    #     "label": "PS",
+    #     "kind": "trapezoid, flat top from 0.5 to 1",
+    #     "abcd": "a = 0,   b = 0.5,   c = 1,   d = 2",
+    #     "outline": "#c65911",
+    #     "fill": "#fce4d6",
+    #     "points": [(0, 0), (0.5, 1), (1, 1), (2, 0)],
+    #     "corners": [("a", 0, 0), ("b", 0.5, 1), ("c", 1, 1), ("d", 2, 0)],
+    # },
     {
         "label": "PS",
-        "kind": "triangle, peak at 1.5",
-        "abcd": "a = 0,   b = 1.5,   c = 1.5,   d = 3",
+        "kind": "triangle, peak at 1 (b = c)",
+        "abcd": "a = 0,   b = 1,   c = 1,   d = 2",
         "outline": "#c65911",
         "fill": "#fce4d6",
-        "points": [(0, 0), (1.5, 1), (3, 0)],
-        "corners": [("a", 0, 0), ("b=c", 1.5, 1), ("d", 3, 0)],
+        "points": [(0, 0), (1, 1), (2, 0)],
+        "corners": [("a", 0, 0), ("b=c", 1, 1), ("d", 2, 0)],
     },
     {
         "label": "PL",
-        "kind": "right shoulder   (up from 0 at 1.5, flat 1 from 3 to 6)",
-        "abcd": "a = 1.5,   b = 3,   c = 6,   d = 6",
+        "kind": "right shoulder   (up from 0 at 1, flat 1 for x >= 2)",
+        "abcd": "a = 1,   b = 2,   c = 2,   d = 2",
         "outline": "#c00000",
         "fill": "#f4cccc",
-        "points": [(1.5, 0), (3, 1), (6, 1), (6, 0)],
-        "corners": [("a", 1.5, 0), ("b", 3, 1), ("c=d", 6, 1)],
+        "points": [(1, 0), (2, 1), (4, 1), (4, 0)],
+        "corners": [("a", 1, 0), ("b", 2, 1)],
     },
 ]
 
@@ -159,7 +177,7 @@ def draw_panel(row, trap):
 canvas.create_text(
     width // 2,
     18,
-    text="Our first set   |   range -6 to 6   |   same a,b,c,d for input X and input Y",
+    text="Membership functions   |   plotted -4 to 4   |   same a,b,c,d for input X and input Y",
     font=("Arial", 12),
 )
 

@@ -9,3 +9,6 @@ cp /usr/local/lib/libSDL_bgi.so .                                     # copy gra
 file libSDL_bgi.so                                                    # must say arm64, not x86_64
 
 ./main.out                                                            # run; then type an angle [-60, 60] and press Enter
+
+export CPATH=/opt/homebrew/include:/opt/homebrew/include/SDL2
+export LIBRARY_PATH=/opt/homebrew/lib
