@@ -135,7 +135,6 @@ void initFuzzySystem(fuzzy_system_rec *fl)
    fl->output_values[out_pl] = 105.0;
    fl->output_values[out_pvl] = 150.0;
 
-
    // Allocate storage for the 25 fuzzy rules.
    fl->rules = (rule *)malloc((size_t)(fl->no_of_rules * sizeof(rule)));
    fl->allocated = true;
